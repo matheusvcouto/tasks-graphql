@@ -1,0 +1,59 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Task {
+  id: ID!
+  title: String!
+  description: String
+  parentId: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  subTasks: [Task!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type sendCodeResponse {
+  message: String!
+}
+
+type LoginResponse {
+  access_token: String!
+}
+
+type Query {
+  """Enviar o codigo para o email"""
+  sendCode(email: String!): sendCodeResponse!
+
+  """Verificar se o codigo está correto. Retorna o token de acesso"""
+  login(data: LoginInput!): LoginResponse!
+  unaltorizeTest: String!
+  tasks: [Task!]!
+}
+
+input LoginInput {
+  email: String!
+  code: Float!
+}
+
+type Mutation {
+  """Verificar se o codigo está correto. Retorna o token de acesso"""
+  loginTest(email: String!): LoginResponse!
+  createTask(input: CreateTaskInput!): Task!
+  deleteTask(taskId: String!): Task!
+  generateSubTasks(input: GenerateSubTasksInput!): Task!
+}
+
+input CreateTaskInput {
+  title: String!
+  description: String = null
+}
+
+input GenerateSubTasksInput {
+  taskId: String!
+  prompt: String!
+}

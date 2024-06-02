@@ -1,0 +1,8 @@
+node_modules
+# Keep environment variables out of version control
+.env
+dist
+private_key.pem
+public_key.pem
+private_key_base64.txt
+public_key_base64.txt

@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id @default(uuid())
+  name  String
+  email String @unique()
+
+  code Code?
+  tasks         Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user")
+}
+
+model Code {
+  id    String @id @default(cuid())
+  value Int
+
+  // user   User   @relation(fields: [userId], references: [id])
+  // userId String @unique
+
+  user  User   @relation(fields: [email], references: [email], onUpdate: Cascade, onDelete: Cascade)
+  email String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("code")
+}
+
+// model AccessCode {
+//   id    String @id @default(cuid())
+//   value String
+
+//   user   User   @relation(fields: [userId], references: [id])
+//   userId String @unique
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   @@map("access_code")
+// }
+
+model Task {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+
+  subTasks Task[]  @relation("ParentSubTask")
+  parent   Task?   @relation("ParentSubTask", fields: [parentId], references: [id])
+  parentId String? @map("parent_id")
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("task")
+}
